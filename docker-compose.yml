@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:latest
+    volumes:
+      - .db_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=django_mysql_data
+    ports:
+      - "3306:3306"
+    networks:
+      - webpage
+    
+
+  web:
+    build: .
+    command: ./entrypoint.sh
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - webpage
+
+networks:
+  webpage:
